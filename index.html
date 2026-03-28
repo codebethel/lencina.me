@@ -275,6 +275,96 @@
       transition: all 0.3s;
     }
 
+    /* ==================== LANGUAGE SWITCHER ==================== */
+    .lang-switcher {
+      position: relative;
+      margin-left: 1rem;
+    }
+
+    .lang-btn {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      padding: 0.4rem 0.8rem;
+      border-radius: 8px;
+      border: 1px solid rgba(255,255,255,0.1);
+      background: rgba(255,255,255,0.03);
+      color: var(--text-muted);
+      font-family: var(--mono);
+      font-size: 0.8rem;
+      cursor: pointer;
+      transition: all 0.3s;
+    }
+
+    .lang-btn:hover {
+      border-color: var(--cyan);
+      color: var(--cyan);
+    }
+
+    .lang-btn svg {
+      width: 14px;
+      height: 14px;
+      transition: transform 0.3s;
+    }
+
+    .lang-switcher.open .lang-btn svg {
+      transform: rotate(180deg);
+    }
+
+    .lang-dropdown {
+      position: absolute;
+      top: calc(100% + 8px);
+      right: 0;
+      min-width: 160px;
+      background: rgba(18, 18, 26, 0.95);
+      backdrop-filter: blur(20px);
+      border: 1px solid rgba(255,255,255,0.1);
+      border-radius: 12px;
+      padding: 0.5rem;
+      opacity: 0;
+      visibility: hidden;
+      transform: translateY(-8px);
+      transition: all 0.3s;
+      z-index: 200;
+    }
+
+    .lang-switcher.open .lang-dropdown {
+      opacity: 1;
+      visibility: visible;
+      transform: translateY(0);
+    }
+
+    .lang-option {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 0.5rem 0.8rem;
+      border-radius: 8px;
+      font-size: 0.85rem;
+      color: var(--text-muted);
+      cursor: pointer;
+      transition: all 0.2s;
+      border: none;
+      background: none;
+      width: 100%;
+      font-family: var(--font);
+    }
+
+    .lang-option:hover {
+      background: rgba(6, 214, 160, 0.08);
+      color: var(--text);
+    }
+
+    .lang-option.active {
+      color: var(--cyan);
+      background: rgba(6, 214, 160, 0.1);
+    }
+
+    .lang-flag {
+      font-size: 1.1rem;
+      line-height: 1;
+    }
+
     /* ==================== SECTIONS ==================== */
     section {
       position: relative;
@@ -929,6 +1019,7 @@
 
       .nav-links { display: none; }
       .hamburger { display: flex; }
+      .lang-switcher { margin-left: 0; }
 
       .nav-links.open {
         display: flex;
@@ -1004,29 +1095,45 @@
   <nav id="navbar">
     <a href="#" class="nav-logo">&lt;angelo /&gt;</a>
     <ul class="nav-links" id="navLinks">
-      <li><a href="#about">About</a></li>
-      <li><a href="#skills">Skills</a></li>
-      <li><a href="#experience">Experience</a></li>
-      <li><a href="#contact">Contact</a></li>
+      <li><a href="#about" data-i18n="nav.about">About</a></li>
+      <li><a href="#skills" data-i18n="nav.skills">Skills</a></li>
+      <li><a href="#experience" data-i18n="nav.experience">Experience</a></li>
+      <li><a href="#contact" data-i18n="nav.contact">Contact</a></li>
     </ul>
-    <button class="hamburger" id="hamburger" aria-label="Toggle menu">
-      <span></span><span></span><span></span>
-    </button>
+    <div style="display:flex;align-items:center;gap:0.5rem;">
+      <div class="lang-switcher" id="langSwitcher">
+        <button class="lang-btn" id="langBtn" aria-label="Change language">
+          <span class="lang-flag" id="langFlag">🇺🇸</span>
+          <span id="langLabel">EN</span>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+        </button>
+        <div class="lang-dropdown" id="langDropdown">
+          <button class="lang-option active" data-lang="en"><span class="lang-flag">🇺🇸</span> English</button>
+          <button class="lang-option" data-lang="pt-BR"><span class="lang-flag">🇧🇷</span> Português (BR)</button>
+          <button class="lang-option" data-lang="pt-PT"><span class="lang-flag">🇵🇹</span> Português (PT)</button>
+          <button class="lang-option" data-lang="es"><span class="lang-flag">🇪🇸</span> Español</button>
+          <button class="lang-option" data-lang="de"><span class="lang-flag">🇩🇪</span> Deutsch</button>
+        </div>
+      </div>
+      <button class="hamburger" id="hamburger" aria-label="Toggle menu">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
   </nav>
 
   <!-- Hero -->
   <section class="hero" id="hero">
     <div class="hero-badge">
       <span class="dot"></span>
-      Available for new projects
+      <span data-i18n="hero.badge">Available for new projects</span>
     </div>
 
-    <h1>
+    <h1 data-i18n-html="hero.title">
       I build things<br>
       that <span class="gradient-text">actually work</span>.
     </h1>
 
-    <p>
+    <p data-i18n="hero.subtitle">
       Full-Stack Developer with 10+ years crafting complex, production-grade systems.
       From real-time applications to geospatial platforms — I solve the hard problems.
     </p>
@@ -1034,10 +1141,10 @@
     <div class="hero-cta">
       <a href="#contact" class="btn btn-primary">
         <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
-        Get in Touch
+        <span data-i18n="hero.cta1">Get in Touch</span>
       </a>
       <a href="#skills" class="btn btn-outline">
-        See What I Do
+        <span data-i18n="hero.cta2">See What I Do</span>
         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
       </a>
     </div>
@@ -1045,15 +1152,15 @@
     <div class="hero-stats">
       <div class="stat">
         <h3>10+</h3>
-        <p>Years of Experience</p>
+        <p data-i18n="hero.stat1">Years of Experience</p>
       </div>
       <div class="stat">
         <h3>50+</h3>
-        <p>Projects Delivered</p>
+        <p data-i18n="hero.stat2">Projects Delivered</p>
       </div>
       <div class="stat">
         <h3>5+</h3>
-        <p>Languages Spoken</p>
+        <p data-i18n="hero.stat3">Languages Spoken</p>
       </div>
     </div>
   </section>
@@ -1128,19 +1235,19 @@
   <section id="about">
     <div class="about-content">
       <div class="about-text reveal">
-        <span class="section-label">// About Me</span>
-        <h2 class="section-title">Turning complexity<br>into clean code.</h2>
-        <p>
+        <span class="section-label" data-i18n="about.label">// About Me</span>
+        <h2 class="section-title" data-i18n-html="about.title">Turning complexity<br>into clean code.</h2>
+        <p data-i18n="about.p1">
           I'm Angelo Lencina — a Brazilian-born developer based in Europe with a passion for
           building systems that handle the messiest, most complex challenges. I thrive at the
           intersection of performance engineering, geospatial tech, and real-time data.
         </p>
-        <p>
+        <p data-i18n="about.p2">
           With over a decade of experience, I've shipped 50+ projects across multiple industries —
           from high-throughput APIs serving millions of requests, to geospatial platforms mapping
           real-world data, to consulting on architecture decisions for growing teams.
         </p>
-        <p>
+        <p data-i18n-html="about.p3">
           I founded <strong style="color: var(--cyan);">Codebethel</strong> to help teams tackle
           the engineering problems that keep them up at night. Whether it's debugging a critical
           performance bottleneck or designing a system from scratch — I'm in.
@@ -1174,8 +1281,8 @@
   <!-- Skills -->
   <section id="skills">
     <div class="reveal">
-      <span class="section-label">// What I Do</span>
-      <h2 class="section-title">Skills & Expertise</h2>
+      <span class="section-label" data-i18n="skills.label">// What I Do</span>
+      <h2 class="section-title" data-i18n="skills.title">Skills & Expertise</h2>
     </div>
 
     <div class="skills-grid" style="margin-top: 2.5rem;">
@@ -1183,8 +1290,8 @@
         <div class="skill-icon cyan">
           <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg>
         </div>
-        <h3>Full-Stack Development</h3>
-        <p>End-to-end application development from pixel-perfect frontends to bulletproof backends and APIs.</p>
+        <h3 data-i18n="skills.fullstack.title">Full-Stack Development</h3>
+        <p data-i18n="skills.fullstack.desc">End-to-end application development from pixel-perfect frontends to bulletproof backends and APIs.</p>
         <div class="skill-tags">
           <span class="skill-tag">React</span>
           <span class="skill-tag">Next.js</span>
@@ -1197,8 +1304,8 @@
         <div class="skill-icon magenta">
           <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
         </div>
-        <h3>GIS & Geospatial</h3>
-        <p>Building mapping platforms, spatial queries, and location-aware systems that make sense of real-world data.</p>
+        <h3 data-i18n="skills.gis.title">GIS & Geospatial</h3>
+        <p data-i18n="skills.gis.desc">Building mapping platforms, spatial queries, and location-aware systems that make sense of real-world data.</p>
         <div class="skill-tags">
           <span class="skill-tag">PostGIS</span>
           <span class="skill-tag">Mapbox</span>
@@ -1211,8 +1318,8 @@
         <div class="skill-icon blue">
           <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg>
         </div>
-        <h3>Performance Engineering</h3>
-        <p>Diagnosing bottlenecks, optimizing queries, and tuning systems for maximum throughput under pressure.</p>
+        <h3 data-i18n="skills.perf.title">Performance Engineering</h3>
+        <p data-i18n="skills.perf.desc">Diagnosing bottlenecks, optimizing queries, and tuning systems for maximum throughput under pressure.</p>
         <div class="skill-tags">
           <span class="skill-tag">Profiling</span>
           <span class="skill-tag">Redis</span>
@@ -1225,8 +1332,8 @@
         <div class="skill-icon yellow">
           <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="3" width="20" height="14" rx="2" ry="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
         </div>
-        <h3>Architecture & Design</h3>
-        <p>Designing scalable, maintainable systems with clean architecture, microservices, and event-driven patterns.</p>
+        <h3 data-i18n="skills.arch.title">Architecture & Design</h3>
+        <p data-i18n="skills.arch.desc">Designing scalable, maintainable systems with clean architecture, microservices, and event-driven patterns.</p>
         <div class="skill-tags">
           <span class="skill-tag">System Design</span>
           <span class="skill-tag">Microservices</span>
@@ -1238,8 +1345,8 @@
         <div class="skill-icon orange">
           <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
         </div>
-        <h3>DevOps & Cloud</h3>
-        <p>Shipping code with confidence through automated pipelines, containerization, and cloud infrastructure.</p>
+        <h3 data-i18n="skills.devops.title">DevOps & Cloud</h3>
+        <p data-i18n="skills.devops.desc">Shipping code with confidence through automated pipelines, containerization, and cloud infrastructure.</p>
         <div class="skill-tags">
           <span class="skill-tag">Docker</span>
           <span class="skill-tag">AWS</span>
@@ -1252,8 +1359,8 @@
         <div class="skill-icon pink">
           <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
         </div>
-        <h3>Technical Consulting</h3>
-        <p>Embedding with teams to unblock critical work, mentor developers, and drive technical decisions forward.</p>
+        <h3 data-i18n="skills.consulting.title">Technical Consulting</h3>
+        <p data-i18n="skills.consulting.desc">Embedding with teams to unblock critical work, mentor developers, and drive technical decisions forward.</p>
         <div class="skill-tags">
           <span class="skill-tag">Code Review</span>
           <span class="skill-tag">Mentoring</span>
@@ -1266,16 +1373,16 @@
   <!-- Experience -->
   <section id="experience">
     <div class="reveal">
-      <span class="section-label">// Experience</span>
-      <h2 class="section-title">Where I've Been</h2>
+      <span class="section-label" data-i18n="exp.label">// Experience</span>
+      <h2 class="section-title" data-i18n="exp.title">Where I've Been</h2>
     </div>
 
     <div class="timeline" style="margin-top: 2.5rem;">
       <div class="timeline-item">
         <div class="timeline-date">2020 — Present</div>
-        <div class="timeline-title">Founder & Lead Engineer</div>
+        <div class="timeline-title" data-i18n="exp.job1.title">Founder & Lead Engineer</div>
         <div class="timeline-company">Codebethel</div>
-        <div class="timeline-desc">
+        <div class="timeline-desc" data-i18n="exp.job1.desc">
           Founded a consulting and development studio focused on solving hard engineering problems.
           Delivering full-stack solutions, performance optimization, and technical consulting for
           teams across Europe and Latin America.
@@ -1284,9 +1391,9 @@
 
       <div class="timeline-item">
         <div class="timeline-date">2018 — 2020</div>
-        <div class="timeline-title">Senior Full-Stack Developer</div>
-        <div class="timeline-company">Geospatial & Real-time Systems</div>
-        <div class="timeline-desc">
+        <div class="timeline-title" data-i18n="exp.job2.title">Senior Full-Stack Developer</div>
+        <div class="timeline-company" data-i18n="exp.job2.company">Geospatial & Real-time Systems</div>
+        <div class="timeline-desc" data-i18n="exp.job2.desc">
           Built high-throughput geospatial platforms and real-time data processing pipelines.
           Worked with PostGIS, WebSockets, and event-driven architectures serving millions of requests.
         </div>
@@ -1294,9 +1401,9 @@
 
       <div class="timeline-item">
         <div class="timeline-date">2015 — 2018</div>
-        <div class="timeline-title">Full-Stack Developer</div>
-        <div class="timeline-company">Various Projects</div>
-        <div class="timeline-desc">
+        <div class="timeline-title" data-i18n="exp.job3.title">Full-Stack Developer</div>
+        <div class="timeline-company" data-i18n="exp.job3.company">Various Projects</div>
+        <div class="timeline-desc" data-i18n="exp.job3.desc">
           Developed web applications and APIs across multiple industries. Gained deep expertise in
           JavaScript/TypeScript ecosystems, database design, and cloud deployments.
         </div>
@@ -1304,9 +1411,9 @@
 
       <div class="timeline-item">
         <div class="timeline-date">2013 — 2015</div>
-        <div class="timeline-title">Software Developer</div>
-        <div class="timeline-company">Early Career</div>
-        <div class="timeline-desc">
+        <div class="timeline-title" data-i18n="exp.job4.title">Software Developer</div>
+        <div class="timeline-company" data-i18n="exp.job4.company">Early Career</div>
+        <div class="timeline-desc" data-i18n="exp.job4.desc">
           Started the journey building web applications and learning the fundamentals of
           software engineering, databases, and system administration.
         </div>
@@ -1318,9 +1425,9 @@
   <section id="contact">
     <div class="contact-grid">
       <div class="contact-info reveal">
-        <span class="section-label">// Get In Touch</span>
-        <h2>Let's build<br>something <span class="gradient-text">great</span>.</h2>
-        <p>
+        <span class="section-label" data-i18n="contact.label">// Get In Touch</span>
+        <h2 data-i18n-html="contact.title">Let's build<br>something <span class="gradient-text">great</span>.</h2>
+        <p data-i18n="contact.subtitle">
           Got a project in mind? Need help with a tough engineering challenge?
           I'm always open to interesting conversations and new opportunities.
         </p>
@@ -1332,7 +1439,7 @@
             </div>
             <div>
               <span>angelo@codebethel.com</span>
-              <small>Email me anytime</small>
+              <small data-i18n="contact.email.sub">Email me anytime</small>
             </div>
           </a>
 
@@ -1342,7 +1449,7 @@
             </div>
             <div>
               <span>LinkedIn</span>
-              <small>Let's connect</small>
+              <small data-i18n="contact.linkedin.sub">Let's connect</small>
             </div>
           </a>
 
@@ -1352,7 +1459,7 @@
             </div>
             <div>
               <span>WhatsApp</span>
-              <small>Quick chat</small>
+              <small data-i18n="contact.whatsapp.sub">Quick chat</small>
             </div>
           </a>
 
@@ -1362,7 +1469,7 @@
             </div>
             <div>
               <span>GitHub</span>
-              <small>See my code</small>
+              <small data-i18n="contact.github.sub">See my code</small>
             </div>
           </a>
         </div>
@@ -1371,18 +1478,18 @@
       <div class="contact-form reveal">
         <form action="https://formspree.io/f/YOUR_FORM_ID" method="POST">
           <div class="form-group">
-            <label for="name">Name</label>
-            <input type="text" id="name" name="name" placeholder="Your name" required>
+            <label for="name" data-i18n="form.name">Name</label>
+            <input type="text" id="name" name="name" data-i18n-placeholder="form.name.placeholder" placeholder="Your name" required>
           </div>
           <div class="form-group">
-            <label for="email">Email</label>
+            <label for="email" data-i18n="form.email">Email</label>
             <input type="email" id="email" name="email" placeholder="your@email.com" required>
           </div>
           <div class="form-group">
-            <label for="message">Message</label>
-            <textarea id="message" name="message" placeholder="Tell me about your project..." required></textarea>
+            <label for="message" data-i18n="form.message">Message</label>
+            <textarea id="message" name="message" data-i18n-placeholder="form.message.placeholder" placeholder="Tell me about your project..." required></textarea>
           </div>
-          <button type="submit" class="form-submit">
+          <button type="submit" class="form-submit" data-i18n-html="form.submit">
             Send Message
             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display: inline; vertical-align: middle; margin-left: 6px;"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
           </button>
@@ -1407,7 +1514,7 @@
         <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
       </a>
     </div>
-    <p>&copy; 2026 Angelo Lencina. Built with caffeine and curiosity.</p>
+    <p data-i18n-html="footer.copy">&copy; 2026 Angelo Lencina. Built with caffeine and curiosity.</p>
   </footer>
 
   <script>
@@ -1548,6 +1655,401 @@
     }, { threshold: 0.5 });
 
     stats.forEach(stat => countObserver.observe(stat));
+
+    // ==================== i18n TRANSLATION SYSTEM ====================
+    const translations = {
+      en: {
+        'nav.about': 'About',
+        'nav.skills': 'Skills',
+        'nav.experience': 'Experience',
+        'nav.contact': 'Contact',
+        'hero.badge': 'Available for new projects',
+        'hero.title': 'I build things<br>that <span class="gradient-text">actually work</span>.',
+        'hero.subtitle': 'Full-Stack Developer with 10+ years crafting complex, production-grade systems. From real-time applications to geospatial platforms — I solve the hard problems.',
+        'hero.cta1': 'Get in Touch',
+        'hero.cta2': 'See What I Do',
+        'hero.stat1': 'Years of Experience',
+        'hero.stat2': 'Projects Delivered',
+        'hero.stat3': 'Languages Spoken',
+        'about.label': '// About Me',
+        'about.title': 'Turning complexity<br>into clean code.',
+        'about.p1': "I'm Angelo Lencina — a Brazilian-born developer based in Europe with a passion for building systems that handle the messiest, most complex challenges. I thrive at the intersection of performance engineering, geospatial tech, and real-time data.",
+        'about.p2': "With over a decade of experience, I've shipped 50+ projects across multiple industries — from high-throughput APIs serving millions of requests, to geospatial platforms mapping real-world data, to consulting on architecture decisions for growing teams.",
+        'about.p3': 'I founded <strong style="color: var(--cyan);">Codebethel</strong> to help teams tackle the engineering problems that keep them up at night. Whether it\'s debugging a critical performance bottleneck or designing a system from scratch — I\'m in.',
+        'skills.label': '// What I Do',
+        'skills.title': 'Skills & Expertise',
+        'skills.fullstack.title': 'Full-Stack Development',
+        'skills.fullstack.desc': 'End-to-end application development from pixel-perfect frontends to bulletproof backends and APIs.',
+        'skills.gis.title': 'GIS & Geospatial',
+        'skills.gis.desc': 'Building mapping platforms, spatial queries, and location-aware systems that make sense of real-world data.',
+        'skills.perf.title': 'Performance Engineering',
+        'skills.perf.desc': 'Diagnosing bottlenecks, optimizing queries, and tuning systems for maximum throughput under pressure.',
+        'skills.arch.title': 'Architecture & Design',
+        'skills.arch.desc': 'Designing scalable, maintainable systems with clean architecture, microservices, and event-driven patterns.',
+        'skills.devops.title': 'DevOps & Cloud',
+        'skills.devops.desc': 'Shipping code with confidence through automated pipelines, containerization, and cloud infrastructure.',
+        'skills.consulting.title': 'Technical Consulting',
+        'skills.consulting.desc': 'Embedding with teams to unblock critical work, mentor developers, and drive technical decisions forward.',
+        'exp.label': '// Experience',
+        'exp.title': "Where I've Been",
+        'exp.job1.title': 'Founder & Lead Engineer',
+        'exp.job1.desc': 'Founded a consulting and development studio focused on solving hard engineering problems. Delivering full-stack solutions, performance optimization, and technical consulting for teams across Europe and Latin America.',
+        'exp.job2.title': 'Senior Full-Stack Developer',
+        'exp.job2.company': 'Geospatial & Real-time Systems',
+        'exp.job2.desc': 'Built high-throughput geospatial platforms and real-time data processing pipelines. Worked with PostGIS, WebSockets, and event-driven architectures serving millions of requests.',
+        'exp.job3.title': 'Full-Stack Developer',
+        'exp.job3.company': 'Various Projects',
+        'exp.job3.desc': 'Developed web applications and APIs across multiple industries. Gained deep expertise in JavaScript/TypeScript ecosystems, database design, and cloud deployments.',
+        'exp.job4.title': 'Software Developer',
+        'exp.job4.company': 'Early Career',
+        'exp.job4.desc': 'Started the journey building web applications and learning the fundamentals of software engineering, databases, and system administration.',
+        'contact.label': '// Get In Touch',
+        'contact.title': 'Let\'s build<br>something <span class="gradient-text">great</span>.',
+        'contact.subtitle': "Got a project in mind? Need help with a tough engineering challenge? I'm always open to interesting conversations and new opportunities.",
+        'contact.email.sub': 'Email me anytime',
+        'contact.linkedin.sub': "Let's connect",
+        'contact.whatsapp.sub': 'Quick chat',
+        'contact.github.sub': 'See my code',
+        'form.name': 'Name',
+        'form.name.placeholder': 'Your name',
+        'form.email': 'Email',
+        'form.message': 'Message',
+        'form.message.placeholder': 'Tell me about your project...',
+        'form.submit': 'Send Message <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display: inline; vertical-align: middle; margin-left: 6px;"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>',
+        'footer.copy': '&copy; 2026 Angelo Lencina. Built with caffeine and curiosity.'
+      },
+      'pt-BR': {
+        'nav.about': 'Sobre',
+        'nav.skills': 'Habilidades',
+        'nav.experience': 'Experiência',
+        'nav.contact': 'Contato',
+        'hero.badge': 'Disponível para novos projetos',
+        'hero.title': 'Eu construo coisas<br>que <span class="gradient-text">realmente funcionam</span>.',
+        'hero.subtitle': 'Desenvolvedor Full-Stack com mais de 10 anos criando sistemas complexos e prontos para produção. De aplicações em tempo real a plataformas geoespaciais — eu resolvo os problemas difíceis.',
+        'hero.cta1': 'Entre em Contato',
+        'hero.cta2': 'Veja o Que Eu Faço',
+        'hero.stat1': 'Anos de Experiência',
+        'hero.stat2': 'Projetos Entregues',
+        'hero.stat3': 'Idiomas Falados',
+        'about.label': '// Sobre Mim',
+        'about.title': 'Transformando complexidade<br>em código limpo.',
+        'about.p1': 'Sou Angelo Lencina — um desenvolvedor nascido no Brasil e baseado na Europa, apaixonado por construir sistemas que lidam com os desafios mais complexos. Prospero na interseção entre engenharia de performance, tecnologia geoespacial e dados em tempo real.',
+        'about.p2': 'Com mais de uma década de experiência, entreguei mais de 50 projetos em diversas indústrias — de APIs de alta performance atendendo milhões de requisições, a plataformas geoespaciais mapeando dados do mundo real, até consultoria em decisões de arquitetura para equipes em crescimento.',
+        'about.p3': 'Fundei a <strong style="color: var(--cyan);">Codebethel</strong> para ajudar equipes a enfrentar os problemas de engenharia que tiram o sono delas. Seja depurando um gargalo crítico de performance ou projetando um sistema do zero — eu topo.',
+        'skills.label': '// O Que Eu Faço',
+        'skills.title': 'Habilidades & Especialidades',
+        'skills.fullstack.title': 'Desenvolvimento Full-Stack',
+        'skills.fullstack.desc': 'Desenvolvimento de aplicações de ponta a ponta, de frontends pixel-perfect a backends e APIs à prova de balas.',
+        'skills.gis.title': 'GIS & Geoespacial',
+        'skills.gis.desc': 'Construindo plataformas de mapeamento, consultas espaciais e sistemas baseados em localização que fazem sentido dos dados do mundo real.',
+        'skills.perf.title': 'Engenharia de Performance',
+        'skills.perf.desc': 'Diagnosticando gargalos, otimizando consultas e ajustando sistemas para máximo throughput sob pressão.',
+        'skills.arch.title': 'Arquitetura & Design',
+        'skills.arch.desc': 'Projetando sistemas escaláveis e manuteníveis com arquitetura limpa, microsserviços e padrões orientados a eventos.',
+        'skills.devops.title': 'DevOps & Cloud',
+        'skills.devops.desc': 'Entregando código com confiança através de pipelines automatizados, containerização e infraestrutura em nuvem.',
+        'skills.consulting.title': 'Consultoria Técnica',
+        'skills.consulting.desc': 'Integrando-se com equipes para desbloquear trabalhos críticos, mentorar desenvolvedores e impulsionar decisões técnicas.',
+        'exp.label': '// Experiência',
+        'exp.title': 'Por Onde Passei',
+        'exp.job1.title': 'Fundador & Engenheiro Líder',
+        'exp.job1.desc': 'Fundei um estúdio de consultoria e desenvolvimento focado em resolver problemas complexos de engenharia. Entregando soluções full-stack, otimização de performance e consultoria técnica para equipes na Europa e América Latina.',
+        'exp.job2.title': 'Desenvolvedor Full-Stack Sênior',
+        'exp.job2.company': 'Sistemas Geoespaciais & Tempo Real',
+        'exp.job2.desc': 'Construí plataformas geoespaciais de alta performance e pipelines de processamento de dados em tempo real. Trabalhei com PostGIS, WebSockets e arquiteturas orientadas a eventos atendendo milhões de requisições.',
+        'exp.job3.title': 'Desenvolvedor Full-Stack',
+        'exp.job3.company': 'Diversos Projetos',
+        'exp.job3.desc': 'Desenvolvi aplicações web e APIs em múltiplas indústrias. Adquiri profunda expertise nos ecossistemas JavaScript/TypeScript, design de banco de dados e deploy em nuvem.',
+        'exp.job4.title': 'Desenvolvedor de Software',
+        'exp.job4.company': 'Início de Carreira',
+        'exp.job4.desc': 'Comecei a jornada construindo aplicações web e aprendendo os fundamentos de engenharia de software, bancos de dados e administração de sistemas.',
+        'contact.label': '// Entre em Contato',
+        'contact.title': 'Vamos construir<br>algo <span class="gradient-text">incrível</span>.',
+        'contact.subtitle': 'Tem um projeto em mente? Precisa de ajuda com um desafio técnico difícil? Estou sempre aberto a conversas interessantes e novas oportunidades.',
+        'contact.email.sub': 'Me envie um e-mail',
+        'contact.linkedin.sub': 'Vamos nos conectar',
+        'contact.whatsapp.sub': 'Conversa rápida',
+        'contact.github.sub': 'Veja meu código',
+        'form.name': 'Nome',
+        'form.name.placeholder': 'Seu nome',
+        'form.email': 'E-mail',
+        'form.message': 'Mensagem',
+        'form.message.placeholder': 'Conte-me sobre seu projeto...',
+        'form.submit': 'Enviar Mensagem <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display: inline; vertical-align: middle; margin-left: 6px;"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>',
+        'footer.copy': '&copy; 2026 Angelo Lencina. Feito com cafeína e curiosidade.'
+      },
+      'pt-PT': {
+        'nav.about': 'Sobre',
+        'nav.skills': 'Competências',
+        'nav.experience': 'Experiência',
+        'nav.contact': 'Contacto',
+        'hero.badge': 'Disponível para novos projetos',
+        'hero.title': 'Eu construo coisas<br>que <span class="gradient-text">realmente funcionam</span>.',
+        'hero.subtitle': 'Programador Full-Stack com mais de 10 anos a criar sistemas complexos e prontos para produção. De aplicações em tempo real a plataformas geoespaciais — eu resolvo os problemas difíceis.',
+        'hero.cta1': 'Entrar em Contacto',
+        'hero.cta2': 'Ver o Que Faço',
+        'hero.stat1': 'Anos de Experiência',
+        'hero.stat2': 'Projetos Entregues',
+        'hero.stat3': 'Idiomas Falados',
+        'about.label': '// Sobre Mim',
+        'about.title': 'Transformar complexidade<br>em código limpo.',
+        'about.p1': 'Sou o Angelo Lencina — um programador nascido no Brasil e a viver na Europa, apaixonado por construir sistemas que lidam com os desafios mais complexos. Prospero na interseção entre engenharia de desempenho, tecnologia geoespacial e dados em tempo real.',
+        'about.p2': 'Com mais de uma década de experiência, entreguei mais de 50 projetos em diversas indústrias — de APIs de alto rendimento a servir milhões de pedidos, a plataformas geoespaciais a mapear dados do mundo real, até consultoria em decisões de arquitetura para equipas em crescimento.',
+        'about.p3': 'Fundei a <strong style="color: var(--cyan);">Codebethel</strong> para ajudar equipas a enfrentar os problemas de engenharia que lhes tiram o sono. Seja a depurar um estrangulamento crítico de desempenho ou a projetar um sistema de raiz — estou dentro.',
+        'skills.label': '// O Que Faço',
+        'skills.title': 'Competências & Especialidades',
+        'skills.fullstack.title': 'Desenvolvimento Full-Stack',
+        'skills.fullstack.desc': 'Desenvolvimento de aplicações de ponta a ponta, de frontends perfeitos ao pixel a backends e APIs à prova de bala.',
+        'skills.gis.title': 'GIS & Geoespacial',
+        'skills.gis.desc': 'Construir plataformas de mapeamento, consultas espaciais e sistemas baseados em localização que dão sentido aos dados do mundo real.',
+        'skills.perf.title': 'Engenharia de Desempenho',
+        'skills.perf.desc': 'Diagnosticar estrangulamentos, otimizar consultas e afinar sistemas para máximo rendimento sob pressão.',
+        'skills.arch.title': 'Arquitetura & Design',
+        'skills.arch.desc': 'Projetar sistemas escaláveis e manuteníveis com arquitetura limpa, microsserviços e padrões orientados a eventos.',
+        'skills.devops.title': 'DevOps & Cloud',
+        'skills.devops.desc': 'Entregar código com confiança através de pipelines automatizados, containerização e infraestrutura na nuvem.',
+        'skills.consulting.title': 'Consultoria Técnica',
+        'skills.consulting.desc': 'Integrar-se com equipas para desbloquear trabalhos críticos, orientar programadores e impulsionar decisões técnicas.',
+        'exp.label': '// Experiência',
+        'exp.title': 'Por Onde Passei',
+        'exp.job1.title': 'Fundador & Engenheiro Principal',
+        'exp.job1.desc': 'Fundei um estúdio de consultoria e desenvolvimento focado em resolver problemas complexos de engenharia. A entregar soluções full-stack, otimização de desempenho e consultoria técnica para equipas na Europa e América Latina.',
+        'exp.job2.title': 'Programador Full-Stack Sénior',
+        'exp.job2.company': 'Sistemas Geoespaciais & Tempo Real',
+        'exp.job2.desc': 'Construí plataformas geoespaciais de alto rendimento e pipelines de processamento de dados em tempo real. Trabalhei com PostGIS, WebSockets e arquiteturas orientadas a eventos a servir milhões de pedidos.',
+        'exp.job3.title': 'Programador Full-Stack',
+        'exp.job3.company': 'Diversos Projetos',
+        'exp.job3.desc': 'Desenvolvi aplicações web e APIs em múltiplas indústrias. Adquiri profunda especialização nos ecossistemas JavaScript/TypeScript, design de bases de dados e implementação na nuvem.',
+        'exp.job4.title': 'Programador de Software',
+        'exp.job4.company': 'Início de Carreira',
+        'exp.job4.desc': 'Comecei a jornada a construir aplicações web e a aprender os fundamentos de engenharia de software, bases de dados e administração de sistemas.',
+        'contact.label': '// Entrar em Contacto',
+        'contact.title': 'Vamos construir<br>algo <span class="gradient-text">fantástico</span>.',
+        'contact.subtitle': 'Tem um projeto em mente? Precisa de ajuda com um desafio técnico difícil? Estou sempre aberto a conversas interessantes e novas oportunidades.',
+        'contact.email.sub': 'Envie-me um e-mail',
+        'contact.linkedin.sub': 'Vamos conectar-nos',
+        'contact.whatsapp.sub': 'Conversa rápida',
+        'contact.github.sub': 'Veja o meu código',
+        'form.name': 'Nome',
+        'form.name.placeholder': 'O seu nome',
+        'form.email': 'E-mail',
+        'form.message': 'Mensagem',
+        'form.message.placeholder': 'Fale-me sobre o seu projeto...',
+        'form.submit': 'Enviar Mensagem <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display: inline; vertical-align: middle; margin-left: 6px;"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>',
+        'footer.copy': '&copy; 2026 Angelo Lencina. Feito com cafeína e curiosidade.'
+      },
+      es: {
+        'nav.about': 'Sobre mí',
+        'nav.skills': 'Habilidades',
+        'nav.experience': 'Experiencia',
+        'nav.contact': 'Contacto',
+        'hero.badge': 'Disponible para nuevos proyectos',
+        'hero.title': 'Construyo cosas<br>que <span class="gradient-text">realmente funcionan</span>.',
+        'hero.subtitle': 'Desarrollador Full-Stack con más de 10 años creando sistemas complejos y listos para producción. De aplicaciones en tiempo real a plataformas geoespaciales — resuelvo los problemas difíciles.',
+        'hero.cta1': 'Contactar',
+        'hero.cta2': 'Ver Lo Que Hago',
+        'hero.stat1': 'Años de Experiencia',
+        'hero.stat2': 'Proyectos Entregados',
+        'hero.stat3': 'Idiomas Hablados',
+        'about.label': '// Sobre Mí',
+        'about.title': 'Transformando complejidad<br>en código limpio.',
+        'about.p1': 'Soy Angelo Lencina — un desarrollador nacido en Brasil y basado en Europa, apasionado por construir sistemas que manejan los desafíos más complejos. Prospero en la intersección entre ingeniería de rendimiento, tecnología geoespacial y datos en tiempo real.',
+        'about.p2': 'Con más de una década de experiencia, he entregado más de 50 proyectos en diversas industrias — desde APIs de alto rendimiento sirviendo millones de peticiones, hasta plataformas geoespaciales mapeando datos del mundo real, pasando por consultoría en decisiones de arquitectura para equipos en crecimiento.',
+        'about.p3': 'Fundé <strong style="color: var(--cyan);">Codebethel</strong> para ayudar a equipos a enfrentar los problemas de ingeniería que les quitan el sueño. Ya sea depurando un cuello de botella crítico de rendimiento o diseñando un sistema desde cero — me apunto.',
+        'skills.label': '// Lo Que Hago',
+        'skills.title': 'Habilidades & Especialidades',
+        'skills.fullstack.title': 'Desarrollo Full-Stack',
+        'skills.fullstack.desc': 'Desarrollo de aplicaciones de extremo a extremo, desde frontends pixel-perfect hasta backends y APIs a prueba de balas.',
+        'skills.gis.title': 'GIS & Geoespacial',
+        'skills.gis.desc': 'Construyendo plataformas de mapeo, consultas espaciales y sistemas basados en ubicación que dan sentido a los datos del mundo real.',
+        'skills.perf.title': 'Ingeniería de Rendimiento',
+        'skills.perf.desc': 'Diagnosticando cuellos de botella, optimizando consultas y ajustando sistemas para máximo rendimiento bajo presión.',
+        'skills.arch.title': 'Arquitectura & Diseño',
+        'skills.arch.desc': 'Diseñando sistemas escalables y mantenibles con arquitectura limpia, microservicios y patrones orientados a eventos.',
+        'skills.devops.title': 'DevOps & Cloud',
+        'skills.devops.desc': 'Entregando código con confianza a través de pipelines automatizados, containerización e infraestructura en la nube.',
+        'skills.consulting.title': 'Consultoría Técnica',
+        'skills.consulting.desc': 'Integrándose con equipos para desbloquear trabajo crítico, mentorear desarrolladores e impulsar decisiones técnicas.',
+        'exp.label': '// Experiencia',
+        'exp.title': 'Dónde He Estado',
+        'exp.job1.title': 'Fundador & Ingeniero Líder',
+        'exp.job1.desc': 'Fundé un estudio de consultoría y desarrollo enfocado en resolver problemas complejos de ingeniería. Entregando soluciones full-stack, optimización de rendimiento y consultoría técnica para equipos en Europa y Latinoamérica.',
+        'exp.job2.title': 'Desarrollador Full-Stack Senior',
+        'exp.job2.company': 'Sistemas Geoespaciales & Tiempo Real',
+        'exp.job2.desc': 'Construí plataformas geoespaciales de alto rendimiento y pipelines de procesamiento de datos en tiempo real. Trabajé con PostGIS, WebSockets y arquitecturas orientadas a eventos sirviendo millones de peticiones.',
+        'exp.job3.title': 'Desarrollador Full-Stack',
+        'exp.job3.company': 'Diversos Proyectos',
+        'exp.job3.desc': 'Desarrollé aplicaciones web y APIs en múltiples industrias. Adquirí profunda experiencia en los ecosistemas JavaScript/TypeScript, diseño de bases de datos y despliegues en la nube.',
+        'exp.job4.title': 'Desarrollador de Software',
+        'exp.job4.company': 'Inicio de Carrera',
+        'exp.job4.desc': 'Comencé el viaje construyendo aplicaciones web y aprendiendo los fundamentos de la ingeniería de software, bases de datos y administración de sistemas.',
+        'contact.label': '// Contactar',
+        'contact.title': 'Construyamos<br>algo <span class="gradient-text">genial</span>.',
+        'contact.subtitle': '¿Tienes un proyecto en mente? ¿Necesitas ayuda con un desafío técnico difícil? Siempre estoy abierto a conversaciones interesantes y nuevas oportunidades.',
+        'contact.email.sub': 'Escríbeme cuando quieras',
+        'contact.linkedin.sub': 'Conectemos',
+        'contact.whatsapp.sub': 'Chat rápido',
+        'contact.github.sub': 'Ve mi código',
+        'form.name': 'Nombre',
+        'form.name.placeholder': 'Tu nombre',
+        'form.email': 'Correo',
+        'form.message': 'Mensaje',
+        'form.message.placeholder': 'Cuéntame sobre tu proyecto...',
+        'form.submit': 'Enviar Mensaje <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display: inline; vertical-align: middle; margin-left: 6px;"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>',
+        'footer.copy': '&copy; 2026 Angelo Lencina. Hecho con cafeína y curiosidad.'
+      },
+      de: {
+        'nav.about': 'Über mich',
+        'nav.skills': 'Fähigkeiten',
+        'nav.experience': 'Erfahrung',
+        'nav.contact': 'Kontakt',
+        'hero.badge': 'Verfügbar für neue Projekte',
+        'hero.title': 'Ich baue Dinge,<br>die <span class="gradient-text">wirklich funktionieren</span>.',
+        'hero.subtitle': 'Full-Stack-Entwickler mit über 10 Jahren Erfahrung in der Erstellung komplexer, produktionsreifer Systeme. Von Echtzeit-Anwendungen bis hin zu Geoplattformen — ich löse die schwierigen Probleme.',
+        'hero.cta1': 'Kontakt aufnehmen',
+        'hero.cta2': 'Was ich mache',
+        'hero.stat1': 'Jahre Erfahrung',
+        'hero.stat2': 'Projekte geliefert',
+        'hero.stat3': 'Sprachen gesprochen',
+        'about.label': '// Über Mich',
+        'about.title': 'Komplexität in<br>sauberen Code verwandeln.',
+        'about.p1': 'Ich bin Angelo Lencina — ein in Brasilien geborener Entwickler mit Sitz in Europa, leidenschaftlich daran, Systeme zu bauen, die die komplexesten Herausforderungen bewältigen. Ich gedeihe an der Schnittstelle von Performance-Engineering, Geodaten-Technologie und Echtzeit-Daten.',
+        'about.p2': 'Mit über einem Jahrzehnt Erfahrung habe ich mehr als 50 Projekte in verschiedenen Branchen geliefert — von Hochdurchsatz-APIs, die Millionen von Anfragen bedienen, über Geoplattformen, die reale Daten kartieren, bis hin zur Beratung bei Architekturentscheidungen für wachsende Teams.',
+        'about.p3': 'Ich habe <strong style="color: var(--cyan);">Codebethel</strong> gegründet, um Teams bei den Engineering-Problemen zu helfen, die ihnen den Schlaf rauben. Ob es darum geht, einen kritischen Performance-Engpass zu debuggen oder ein System von Grund auf zu entwerfen — ich bin dabei.',
+        'skills.label': '// Was Ich Mache',
+        'skills.title': 'Fähigkeiten & Expertise',
+        'skills.fullstack.title': 'Full-Stack-Entwicklung',
+        'skills.fullstack.desc': 'End-to-End-Anwendungsentwicklung von pixelgenauen Frontends bis hin zu kugelsicheren Backends und APIs.',
+        'skills.gis.title': 'GIS & Geodaten',
+        'skills.gis.desc': 'Aufbau von Mapping-Plattformen, räumlichen Abfragen und standortbezogenen Systemen, die reale Daten sinnvoll machen.',
+        'skills.perf.title': 'Performance Engineering',
+        'skills.perf.desc': 'Diagnose von Engpässen, Optimierung von Abfragen und Feinabstimmung von Systemen für maximalen Durchsatz unter Druck.',
+        'skills.arch.title': 'Architektur & Design',
+        'skills.arch.desc': 'Entwurf skalierbarer, wartbarer Systeme mit sauberer Architektur, Microservices und ereignisgesteuerten Mustern.',
+        'skills.devops.title': 'DevOps & Cloud',
+        'skills.devops.desc': 'Code mit Zuversicht durch automatisierte Pipelines, Containerisierung und Cloud-Infrastruktur ausliefern.',
+        'skills.consulting.title': 'Technische Beratung',
+        'skills.consulting.desc': 'Integration in Teams, um kritische Arbeit freizuschalten, Entwickler zu betreuen und technische Entscheidungen voranzutreiben.',
+        'exp.label': '// Erfahrung',
+        'exp.title': 'Wo Ich War',
+        'exp.job1.title': 'Gründer & Lead Engineer',
+        'exp.job1.desc': 'Gründung eines Beratungs- und Entwicklungsstudios, das sich auf die Lösung komplexer Engineering-Probleme konzentriert. Bereitstellung von Full-Stack-Lösungen, Performance-Optimierung und technischer Beratung für Teams in Europa und Lateinamerika.',
+        'exp.job2.title': 'Senior Full-Stack-Entwickler',
+        'exp.job2.company': 'Geodaten- & Echtzeitsysteme',
+        'exp.job2.desc': 'Aufbau von Hochdurchsatz-Geoplattformen und Echtzeit-Datenverarbeitungspipelines. Arbeit mit PostGIS, WebSockets und ereignisgesteuerten Architekturen, die Millionen von Anfragen bedienen.',
+        'exp.job3.title': 'Full-Stack-Entwickler',
+        'exp.job3.company': 'Verschiedene Projekte',
+        'exp.job3.desc': 'Entwicklung von Webanwendungen und APIs in verschiedenen Branchen. Tiefgreifende Expertise in JavaScript/TypeScript-Ökosystemen, Datenbankdesign und Cloud-Deployments erworben.',
+        'exp.job4.title': 'Softwareentwickler',
+        'exp.job4.company': 'Karrierebeginn',
+        'exp.job4.desc': 'Beginn der Reise mit dem Aufbau von Webanwendungen und dem Erlernen der Grundlagen von Software-Engineering, Datenbanken und Systemadministration.',
+        'contact.label': '// Kontakt',
+        'contact.title': 'Lass uns<br>etwas <span class="gradient-text">Großartiges</span> bauen.',
+        'contact.subtitle': 'Hast du ein Projekt im Kopf? Brauchst du Hilfe bei einer schwierigen technischen Herausforderung? Ich bin immer offen für interessante Gespräche und neue Möglichkeiten.',
+        'contact.email.sub': 'Schreib mir jederzeit',
+        'contact.linkedin.sub': 'Lass uns vernetzen',
+        'contact.whatsapp.sub': 'Schneller Chat',
+        'contact.github.sub': 'Sieh meinen Code',
+        'form.name': 'Name',
+        'form.name.placeholder': 'Dein Name',
+        'form.email': 'E-Mail',
+        'form.message': 'Nachricht',
+        'form.message.placeholder': 'Erzähl mir von deinem Projekt...',
+        'form.submit': 'Nachricht senden <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display: inline; vertical-align: middle; margin-left: 6px;"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>',
+        'footer.copy': '&copy; 2026 Angelo Lencina. Gebaut mit Koffein und Neugier.'
+      }
+    };
+
+    const langMeta = {
+      en: { flag: '🇺🇸', label: 'EN' },
+      'pt-BR': { flag: '🇧🇷', label: 'PT-BR' },
+      'pt-PT': { flag: '🇵🇹', label: 'PT' },
+      es: { flag: '🇪🇸', label: 'ES' },
+      de: { flag: '🇩🇪', label: 'DE' }
+    };
+
+    function setLanguage(lang) {
+      const dict = translations[lang];
+      if (!dict) return;
+
+      // Update text content
+      document.querySelectorAll('[data-i18n]').forEach(el => {
+        const key = el.getAttribute('data-i18n');
+        if (dict[key]) el.textContent = dict[key];
+      });
+
+      // Update HTML content
+      document.querySelectorAll('[data-i18n-html]').forEach(el => {
+        const key = el.getAttribute('data-i18n-html');
+        if (dict[key]) el.innerHTML = dict[key];
+      });
+
+      // Update placeholders
+      document.querySelectorAll('[data-i18n-placeholder]').forEach(el => {
+        const key = el.getAttribute('data-i18n-placeholder');
+        if (dict[key]) el.placeholder = dict[key];
+      });
+
+      // Update html lang attribute
+      document.documentElement.lang = lang === 'pt-BR' ? 'pt-BR' : lang === 'pt-PT' ? 'pt-PT' : lang;
+
+      // Update switcher button
+      const meta = langMeta[lang];
+      document.getElementById('langFlag').textContent = meta.flag;
+      document.getElementById('langLabel').textContent = meta.label;
+
+      // Update active state in dropdown
+      document.querySelectorAll('.lang-option').forEach(opt => {
+        opt.classList.toggle('active', opt.dataset.lang === lang);
+      });
+
+      // Persist choice
+      localStorage.setItem('preferred-lang', lang);
+    }
+
+    // Language switcher toggle
+    const langSwitcher = document.getElementById('langSwitcher');
+    const langBtn = document.getElementById('langBtn');
+
+    langBtn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      langSwitcher.classList.toggle('open');
+    });
+
+    document.addEventListener('click', () => {
+      langSwitcher.classList.remove('open');
+    });
+
+    document.querySelectorAll('.lang-option').forEach(opt => {
+      opt.addEventListener('click', () => {
+        setLanguage(opt.dataset.lang);
+        langSwitcher.classList.remove('open');
+      });
+    });
+
+    // Auto-detect language on first visit
+    (function initLang() {
+      const saved = localStorage.getItem('preferred-lang');
+      if (saved && translations[saved]) {
+        setLanguage(saved);
+        return;
+      }
+
+      const browserLang = navigator.language || navigator.userLanguage || 'en';
+      const bl = browserLang.toLowerCase();
+
+      if (bl.startsWith('pt-br') || bl === 'pt-br') {
+        setLanguage('pt-BR');
+      } else if (bl.startsWith('pt')) {
+        setLanguage('pt-PT');
+      } else if (bl.startsWith('es')) {
+        setLanguage('es');
+      } else if (bl.startsWith('de')) {
+        setLanguage('de');
+      } else {
+        setLanguage('en');
+      }
+    })();
   </script>
 </body>
 </html>
